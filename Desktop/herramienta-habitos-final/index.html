@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herramienta Hábitos</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Precargar fuentes personalizadas -->
+    <link rel="preload" href="fonts/BrittanySignature.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="fonts/Raleway-Regular.ttf" as="font" type="font/ttf" crossorigin>
+    <!-- Incluir FontAwesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Pantalla de inicio con selector de idioma -->
+    <div id="welcome-screen" class="screen active">
+        <div class="language-selector">
+            <button id="lang-es" class="lang-btn active">Español</button>
+            <button id="lang-en" class="lang-btn">English</button>
+        </div>
+        <div class="banner-container">
+            <img src="img/banner-revolucion-espejo.jpg" alt="Banner Revolución Espejo" class="banner-image">
+        </div>
+        <div class="welcome-content">
+            <h1 class="app-title">Herramienta Hábitos</h1>
+            <p class="welcome-text" data-lang-es="Crea hábitos positivos, refuerza tu amor propio y construye una vida plena"
+               data-lang-en="Create positive habits, strengthen your self-love and build a fulfilling life"></p>
+            <button id="start-button" class="main-button" data-lang-es="Comenzar" data-lang-en="Start"></button>
+        </div>
+    </div>
+
+    <!-- Pantalla principal con módulos -->
+    <div id="main-app" class="screen">
+        <!-- Barra de navegación superior -->
+        <nav class="top-nav">
+            <div class="app-logo">
+                <img src="img/banner-revolucion-espejo.jpg" alt="Logo" class="mini-logo">
+                <span class="logo-text">Herramienta Hábitos</span>
+            </div>
+            <div class="nav-links">
+                <button id="nav-habits" class="nav-link active" data-lang-es="Hábitos" data-lang-en="Habits"></button>
+                <button id="nav-rewards" class="nav-link" data-lang-es="Premios" data-lang-en="Rewards"></button>
+                <button id="nav-stats" class="nav-link" data-lang-es="Estadísticas" data-lang-en="Stats"></button>
+                <button id="nav-settings" class="nav-link" data-lang-es="Ajustes" data-lang-en="Settings"></button>
+            </div>
+            <button id="journal-button" class="journal-btn" data-lang-es="Diario" data-lang-en="Journal"></button>
+        </nav>
+
+        <!-- Notificación dinámica -->
+        <div id="notification" class="notification">
+            <div class="notification-content">
+                <i class="notification-icon"></i>
+                <p class="notification-message"></p>
+            </div>
+        </div>
+
+        <!-- Sección de hábitos -->
+        <section id="habits-section" class="section active">
+            <div class="section-header">
+                <h2 data-lang-es="Mis Hábitos Diarios" data-lang-en="My Daily Habits"></h2>
+                <div class="date-display">
+                    <span id="current-date"></span>
+                </div>
+            </div>
+
+            <div class="progress-overview">
+                <div class="progress-bar-container">
+                    <div class="progress-bar">
+                        <div id="daily-progress" class="progress-fill"></div>
+                    </div>
+                    <span id="daily-percentage" class="progress-text">0%</span>
+                </div>
+                <p class="progress-message" data-lang-es="Completado hoy" data-lang-en="Completed today"></p>
+            </div>
+
+            <div id="habits-container" class="habits-list">
+                <!-- Los hábitos se generan dinámicamente -->
+                <!-- Estructura de ejemplo para un hábito -->
+                <div class="habit-card template">
+                    <div class="habit-header">
+                        <div class="habit-icon-container">
+                            <i class="habit-icon"></i>
+                        </div>
+                        <div class="habit-info">
+                            <h3 class="habit-name"></h3>
+                            <div class="habit-time">
+                                <i class="fas fa-clock"></i>
+                                <span class="habit-hour"></span>
+                                <button class="edit-time-btn"><i class="fas fa-edit"></i></button>
+                            </div>
+                        </div>
+                        <label class="habit-checkbox">
+                            <input type="checkbox" class="habit-check">
+                            <span class="custom-checkbox"></span>
+                        </label>
+                    </div>
+                    <div class="habit-detail">
+                        <div class="habit-progress">
+                            <span class="habit-target" data-lang-es="Meta:" data-lang-en="Target:"></span>
+                            <span class="habit-actual"></span>
+                        </div>
+                        <div class="habit-tracking">
+                            <button class="track-btn" data-lang-es="Registrar" data-lang-en="Track"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button id="add-habit-btn" class="add-button">
+                <i class="fas fa-plus"></i>
+                <span data-lang-es="Añadir Hábito" data-lang-en="Add Habit"></span>
+            </button>
+        </section>
+
+        <!-- Sección de premios -->
+        <section id="rewards-section" class="section">
+            <div class="section-header">
+                <h2 data-lang-es="Mis Premios" data-lang-en="My Rewards"></h2>
+            </div>
+
+            <div class="progress-overview">
+                <div class="progress-bar-container">
+                    <div class="progress-bar">
+                        <div id="weekly-progress" class="progress-fill"></div>
+                    </div>
+                    <span id="weekly-percentage" class="progress-text">0%</span>
+                </div>
+                <p class="progress-message" data-lang-es="Completado esta semana" data-lang-en="Completed this week"></p>
+                <p id="rewards-status" class="rewards-message" data-lang-es="Completa el 85% para desbloquear premios" data-lang-en="Complete 85% to unlock rewards"></p>
+            </div>
+
+            <div class="rewards-categories">
+                <div class="category-tab active" data-category="regular" data-lang-es="Premios Regulares" data-lang-en="Regular Rewards"></div>
+                <div class="category-tab" data-category="special" data-lang-es="Premios del Alma" data-lang-en="Soul Rewards"></div>
+            </div>
+
+            <div id="rewards-container" class="rewards-list">
+                <!-- Los premios se generan dinámicamente -->
+                <!-- Estructura de ejemplo para un premio -->
+                <div class="reward-card template">
+                    <div class="reward-icon-container">
+                        <i class="reward-icon"></i>
+                    </div>
+                    <div class="reward-info">
+                        <h3 class="reward-name"></h3>
+                        <p class="reward-description"></p>
+                    </div>
+                    <div class="reward-status">
+                        <span class="achievement-date"></span>
+                        <button class="claim-btn" data-lang-es="Reclamar" data-lang-en="Claim"></button>
+                    </div>
+                </div>
+            </div>
+
+            <button id="add-reward-btn" class="add-button">
+                <i class="fas fa-plus"></i>
+                <span data-lang-es="Añadir Premio" data-lang-en="Add Reward"></span>
+            </button>
+        </section>
+
+        <!-- Sección de estadísticas -->
+        <section id="stats-section" class="section">
+            <div class="section-header">
+                <h2 data-lang-es="Mis Estadísticas" data-lang-en="My Statistics"></h2>
+            </div>
+
+            <div class="stats-period-selector">
+                <button class="period-btn active" data-period="weekly" data-lang-es="Semanal" data-lang-en="Weekly"></button>
+                <button class="period-btn" data-period="monthly" data-lang-es="Mensual" data-lang-en="Monthly"></button>
+                <button class="period-btn" data-period="yearly" data-lang-es="Anual" data-lang-en="Yearly"></button>
+            </div>
+
+            <div class="stats-overview">
+                <div class="stat-card">
+                    <h3 data-lang-es="Porcentaje general" data-lang-en="Overall percentage"></h3>
+                    <div class="stats-circle">
+                        <span id="overall-percentage">0%</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3 data-lang-es="Premios desbloqueados" data-lang-en="Rewards unlocked"></h3>
+                    <div class="stats-circle">
+                        <span id="rewards-count">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-details">
+                <h3 data-lang-es="Desempeño por hábito" data-lang-en="Performance by habit"></h3>
+                <div id="habits-stats-container" class="habits-stats">
+                    <!-- Las estadísticas se generan dinámicamente -->
+                </div>
+            </div>
+
+            <div class="export-container">
+                <button id="export-pdf-btn" class="export-btn">
+                    <i class="fas fa-file-export"></i>
+                    <span data-lang-es="Exportar reporte" data-lang-en="Export report"></span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Sección de ajustes -->
+        <section id="settings-section" class="section">
+            <div class="section-header">
+                <h2 data-lang-es="Ajustes" data-lang-en="Settings"></h2>
+            </div>
+
+            <div class="settings-group">
+                <h3 data-lang-es="Idioma" data-lang-en="Language"></h3>
+                <div class="settings-option">
+                    <div class="language-selector">
+                        <button id="settings-lang-es" class="lang-btn active">Español</button>
+                        <button id="settings-lang-en" class="lang-btn">English</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h3 data-lang-es="Notificaciones" data-lang-en="Notifications"></h3>
+                <div class="settings-option">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="habit-notifications" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span data-lang-es="Recordatorios de hábitos" data-lang-en="Habit reminders"></span>
+                </div>
+                <div class="settings-option">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="journal-notifications" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span data-lang-es="Recordatorio del diario" data-lang-en="Journal reminder"></span>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h3 data-lang-es="Diario de gratitud" data-lang-en="Gratitude journal"></h3>
+                <div class="settings-option time-picker">
+                    <span data-lang-es="Hora del diario:" data-lang-en="Journal time:"></span>
+                    <input type="time" id="journal-time" value="21:00">
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h3 data-lang-es="Datos" data-lang-en="Data"></h3>
+                <div class="settings-option">
+                    <button id="reset-data-btn" class="danger-button">
+                        <i class="fas fa-trash"></i>
+                        <span data-lang-es="Reiniciar mi rutina desde cero" data-lang-en="Reset my routine"></span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Diario de gratitud (modal) -->
+        <div id="journal-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 data-lang-es="Diario de Gratitud" data-lang-en="Gratitude Journal"></h2>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="journal-timer">
+                        <span data-lang-es="Tiempo restante:" data-lang-en="Time remaining:"></span>
+                        <span id="journal-countdown">10:00</span>
+                    </div>
+                    <div class="journal-question-container">
+                        <p class="journal-instruction" data-lang-es="Responde mentalmente, en tu block de notas o en papel:" data-lang-en="Answer mentally, in your notepad or on paper:"></p>
+                        <p id="journal-question" class="journal-question"></p>
+                    </div>
+                    <div class="journal-navigation">
+                        <button id="prev-question" class="nav-btn">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <span id="question-counter">1/7</span>
+                        <button id="next-question" class="nav-btn">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="finish-journal" class="main-button">
+                        <i class="fas fa-bed"></i>
+                        <span data-lang-es="Terminar mi día" data-lang-en="End my day"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para añadir o editar hábitos -->
+        <div id="habit-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="habit-modal-title" data-lang-es="Añadir Hábito" data-lang-en="Add Habit"></h2>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="habit-name" data-lang-es="Nombre del hábito:" data-lang-en="Habit name:"></label>
+                        <input type="text" id="habit-name" maxlength="30">
+                    </div>
+                    <div class="form-group">
+                        <label data-lang-es="Ícono:" data-lang-en="Icon:"></label>
+                        <div class="icons-grid" id="habit-icons">
+                            <div class="icon-option" data-icon="fa-leaf"><i class="fas fa-leaf"></i></div>
+                            <div class="icon-option" data-icon="fa-book"><i class="fas fa-book"></i></div>
+                            <div class="icon-option" data-icon="fa-tint"><i class="fas fa-tint"></i></div>
+                            <div class="icon-option" data-icon="fa-running"><i class="fas fa-running"></i></div>
+                            <div class="icon-option" data-icon="fa-brain"><i class="fas fa-brain"></i></div>
+                            <div class="icon-option" data-icon="fa-heart"><i class="fas fa-heart"></i></div>
+                            <div class="icon-option" data-icon="fa-sun"><i class="fas fa-sun"></i></div>
+                            <div class="icon-option" data-icon="fa-apple-alt"><i class="fas fa-apple-alt"></i></div>
+                            <div class="icon-option" data-icon="fa-moon"><i class="fas fa-moon"></i></div>
+                            <div class="icon-option" data-icon="fa-smile"><i class="fas fa-smile"></i></div>
+                            <div class="icon-option" data-icon="fa-seedling"><i class="fas fa-seedling"></i></div>
+                            <div class="icon-option" data-icon="fa-star"><i class="fas fa-star"></i></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="habit-time" data-lang-es="Hora:" data-lang-en="Time:"></label>
+                        <input type="time" id="habit-time">
+                    </div>
+                    <div class="form-group">
+                        <label for="habit-target" data-lang-es="Meta (opcional):" data-lang-en="Target (optional):"></label>
+                        <div class="target-input-group">
+                            <input type="number" id="habit-target" min="1" max="180">
+                            <select id="habit-unit">
+                                <option value="minutos" data-lang-es="minutos" data-lang-en="minutes">minutos</option>
+                                <option value="veces" data-lang-es="veces" data-lang-en="times">veces</option>
+                                <option value="páginas" data-lang-es="páginas" data-lang-en="pages">páginas</option>
+                                <option value="vasos" data-lang-es="vasos" data-lang-en="glasses">vasos</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="save-habit" class="main-button" data-lang-es="Guardar" data-lang-en="Save"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para añadir o editar premios -->
+        <div id="reward-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="reward-modal-title" data-lang-es="Añadir Premio" data-lang-en="Add Reward"></h2>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="reward-name" data-lang-es="Nombre del premio:" data-lang-en="Reward name:"></label>
+                        <input type="text" id="reward-name" maxlength="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="reward-description" data-lang-es="Descripción (opcional):" data-lang-en="Description (optional):"></label>
+                        <textarea id="reward-description" maxlength="100"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label data-lang-es="Ícono:" data-lang-en="Icon:"></label>
+                        <div class="icons-grid" id="reward-icons">
+                            <div class="icon-option" data-icon="fa-gift"><i class="fas fa-gift"></i></div>
+                            <div class="icon-option" data-icon="fa-coffee"><i class="fas fa-coffee"></i></div>
+                            <div class="icon-option" data-icon="fa-spa"><i class="fas fa-spa"></i></div>
+                            <div class="icon-option" data-icon="fa-ice-cream"><i class="fas fa-ice-cream"></i></div>
+                            <div class="icon-option" data-icon="fa-film"><i class="fas fa-film"></i></div>
+                            <div class="icon-option" data-icon="fa-shopping-bag"><i class="fas fa-shopping-bag"></i></div>
+                            <div class="icon-option" data-icon="fa-music"><i class="fas fa-music"></i></div>
+                            <div class="icon-option" data-icon="fa-bath"><i class="fas fa-bath"></i></div>
+                            <div class="icon-option" data-icon="fa-cookie"><i class="fas fa-cookie"></i></div>
+                            <div class="icon-option" data-icon="fa-book-open"><i class="fas fa-book-open"></i></div>
+                            <div class="icon-option" data-icon="fa-heart"><i class="fas fa-heart"></i></div>
+                            <div class="icon-option" data-icon="fa-star"><i class="fas fa-star"></i></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="special-reward">
+                            <span data-lang-es="Este es un Premio del Alma (especial)" data-lang-en="This is a Soul Reward (special)"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="save-reward" class="main-button" data-lang-es="Guardar" data-lang-en="Save"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de recompensa desbloqueada -->
+        <div id="unlock-modal" class="modal">
+            <div class="modal-content celebration">
+                <div class="modal-header celebration-header">
+                    <h2 data-lang-es="¡Premio Desbloqueado!" data-lang-en="Reward Unlocked!"></h2>
+                </div>
+                <div class="modal-body celebration-body">
+                    <div class="celebration-animation">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <p class="celebration-message" data-lang-es="¡Felicidades! Has completado el 85% de tus hábitos esta semana. Es hora de premiarte." data-lang-en="Congratulations! You've completed 85% of your habits this week. Time to reward yourself."></p>
+                    <p class="celebration-submessage" data-lang-es="Te premias porque estás cumpliendo tu palabra contigo. ¡Sigue así!" data-lang-en="You reward yourself because you're keeping your promise to yourself. Keep it up!"></p>
+                    <div class="available-rewards">
+                        <h3 data-lang-es="Elige tu premio:" data-lang-en="Choose your reward:"></h3>
+                        <div id="unlock-rewards-list" class="unlocked-rewards-list">
+                            <!-- Premios disponibles generados dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de confirmación para reiniciar datos -->
+        <div id="confirm-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 data-lang-es="Confirmar reinicio" data-lang-en="Confirm reset"></h2>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p class="confirm-message" data-lang-es="¿Estás segur@? Perderás tus hábitos, progreso y premios registrados." data-lang-en="Are you sure? You will lose your habits, progress and registered rewards."></p>
+                </div>
+                <div class="modal-footer">
+                    <button id="cancel-reset" class="secondary-button" data-lang-es="Cancelar" data-lang-en="Cancel"></button>
+                    <button id="confirm-reset" class="danger-button" data-lang-es="Sí, reiniciar" data-lang-en="Yes, reset"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de día completado -->
+        <div id="day-complete-modal" class="modal">
+            <div class="modal-content celebration">
+                <div class="modal-header celebration-header">
+                    <h2 data-lang-es="Día Completado" data-lang-en="Day Completed"></h2>
+                </div>
+                <div class="modal-body celebration-body">
+                    <div class="celebration-animation">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <p class="celebration-message day-summary" data-lang-es="Resumen del día: ¡Buen trabajo!" data-lang-en="Day summary: Good job!"></p>
+                    <p class="celebration-submessage" data-lang-es="Hoy sembraste gratitud, amor propio y hábitos sanos. 🌷 Duerme feliz." data-lang-en="Today you planted gratitude, self-love and healthy habits. 🌷 Sleep well."></p>
+                </div>
+                <div class="modal-footer">
+                    <button id="close-day-complete" class="main-button">
+                        <i class="fas fa-bed"></i>
+                        <span data-lang-es="Terminar mi día" data-lang-en="End my day"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Temporizador para hábitos -->
+        <div id="timer-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="timer-habit-name"></h2>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body timer-container">
+                    <div class="timer-display">
+                        <span id="timer-minutes">00</span>:<span id="timer-seconds">00</span>
+                    </div>
+                    <div class="timer-controls">
+                        <button id="start-timer" class="timer-btn">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button id="pause-timer" class="timer-btn">
+                            <i class="fas fa-pause"></i>
+                        </button>
+                        <button id="stop-timer" class="timer-btn">
+                            <i class="fas fa-stop"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="timer-target">
+                        <span data-lang-es="Meta:" data-lang-en="Target:"></span>
+                        <span id="timer-target-value"></span>
+                    </div>
+                    <button id="save-timer" class="main-button" data-lang-es="Guardar progreso" data-lang-en="Save progress"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay para elementos emergentes -->
+        <div id="overlay" class="overlay"></div>
+    </div>
+
+    <!-- Script principal de la aplicación -->
+    <script src="script.js"></script>
+</body>
+</html>
